@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'register_screen.dart'; // Importa el archivo donde está definida la clase Registro
+import 'register_screen.dart'; // Importa el archivo donde está definida la clase RegisterScreen
+import 'message_admin.dart'; // Importa el archivo donde está definida la clase MessageAdmin
 
 void main() {
   runApp(MaterialApp(
@@ -81,7 +82,8 @@ class WhiteScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -111,19 +113,26 @@ class WhiteScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    // Acciones cuando se presiona el segundo botón
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    padding: EdgeInsets.all(16.0),
-                  ),
-                  child: Text(
-                    'No tengo un código todavía',
-                    style: TextStyle(
-                      color: Color(0xFF7268DD), // Color en hexadecimal
-                      fontSize: 18.0,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: InkWell(
+                    onTap: () {
+                      // Navega a la pantalla MessageAdmin cuando se presiona el botón
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MessageAdmin()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'No tengo un código todavía',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF7268DD), // Color morado
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ),
                 ),

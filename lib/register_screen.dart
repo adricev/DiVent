@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'home_screen.dart'; // Importa la pantalla HomeScreen
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -58,7 +59,11 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Acciones cuando se presiona el botón
+                  // Navegar a la pantalla HomeScreen cuando se presiona el botón
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF7268DD), // Color en hexadecimal
