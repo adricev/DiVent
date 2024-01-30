@@ -71,7 +71,7 @@ class WhiteScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Si alguien te ha mandado el código de acceso podrás acceder a su calendario y consultar sus eventos. Si todavía no tienes un código de acceso tendrás que ponerte en contacto con el administrador.',
+                    'Si cuentas con un código de acceso, ingresa para ver el calendario. Sin código, comunícate con el administrador.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18.0,
