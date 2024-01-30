@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:divent/splash_screen.dart'; // Asegúrate de que la ruta de importación sea correcta
 
 void main() {
-  runApp(MainApp());
+  runApp(MainApp()); //Hola mundo
 }
 
 class MainApp extends StatelessWidget {
