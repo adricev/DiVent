@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'splash_screen.dart'; // Importa el archivo donde está definida la clase SplashScreen
 
 class MessageAdmin extends StatelessWidget {
   @override
@@ -65,7 +66,31 @@ class MessageAdmin extends StatelessWidget {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Acciones cuando se presiona el botón
+                // Mostrar un diálogo emergente para confirmar el envío del mensaje
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Mensaje enviado'),
+                      content: Text('El mensaje se ha enviado correctamente.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            // Cierra el diálogo
+                            Navigator.of(context).pop();
+                            // Navega a la pantalla de Splash
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SplashScreen()),
+                            );
+                          },
+                          child: Text('Aceptar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFF7268DD),
