@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'list_events.dart';
+import 'new_event.dart';
+import 'profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('es_ES');
@@ -53,6 +61,9 @@ class HomeScreen extends StatelessWidget {
                 onDaySelected: (selectedDay, focusedDay) {
                   // Acciones cuando se selecciona un día
                 },
+                onFormatChanged: (format) {
+                  // Acciones cuando cambia el formato del calendario
+                },
               ),
             ),
             SizedBox(height: 20),
@@ -71,15 +82,30 @@ class HomeScreen extends StatelessWidget {
             ),
             IconButton(
               icon: Image.asset('images/Menu.png', width: 35),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ListEvents()),
+                );
+              },
             ),
             IconButton(
-              icon: Image.asset('images/Nuevo.png', width: 30),
-              onPressed: () {},
+              icon: Image.asset('images/Nuevo.png', width: 35),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewEvent()),
+                );
+              },
             ),
             IconButton(
-              icon: Image.asset('images/Perfil.png', width: 30),
-              onPressed: () {},
+              icon: Image.asset('images/Perfil.png', width: 35),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
+              },
             ),
           ],
         ),
