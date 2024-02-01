@@ -18,7 +18,7 @@ class _NewEventState extends State<NewEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Event'),
+        title: Text('Nuevo Evento'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -211,12 +211,7 @@ class _NewEventState extends State<NewEvent> {
             ),
             IconButton(
               icon: Image.asset('images/Nuevo.png', width: 35),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewEvent()),
-                );
-              },
+              onPressed: () {},
             ),
             IconButton(
               icon: Image.asset('images/Perfil.png', width: 35),
