@@ -18,7 +18,7 @@ class _NewEventState extends State<NewEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nuevo Evento'),
+        title: Text('New Event'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -192,7 +192,7 @@ class _NewEventState extends State<NewEvent> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: Image.asset('images/B Calendar.png', width: 35),
+              icon: Image.asset('images/Calendar.png', width: 35),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -210,11 +210,11 @@ class _NewEventState extends State<NewEvent> {
               },
             ),
             IconButton(
-              icon: Image.asset('images/Nuevo.png', width: 35),
+              icon: Image.asset('images/B Nuevo.png', width: 30),
               onPressed: () {},
             ),
             IconButton(
-              icon: Image.asset('images/Perfil.png', width: 35),
+              icon: Image.asset('images/Perfil.png', width: 30),
               onPressed: () {
                 Navigator.push(
                   context,
