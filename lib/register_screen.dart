@@ -1,16 +1,18 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart'; // Importa la pantalla HomeScreen
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // Necesario para convertir el hash a String
+
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _invitationCodeController =
-      TextEditingController();
+  final TextEditingController _invitationCodeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   RegisterScreen({super.key});
@@ -128,13 +130,34 @@ class RegisterScreen extends StatelessWidget {
 
   Future<void> _saveUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
+
+    // Obtén la contraseña del controlador
+    String rawPassword = _passwordController.text;
+
+    // Aplica el hash a la contraseña
+    String hashedPassword = _hashPassword(rawPassword);
+
     final response = await supabase.from('users').insert([
       {
         'user_name': _nameController.text.toLowerCase().trim(),
         'user_mail': _emailController.text.toLowerCase().trim(),
-        'user_pwd': _passwordController.text.trim(),
+        'user_pwd': hashedPassword,
         'user_number': _phoneController.text.trim()
       }
     ]);
   }
+
+  String _hashPassword(String password) {
+    // Convierte la contraseña en bytes
+    List<int> passwordBytes = utf8.encode(password);
+
+    // Aplica el hash SHA-256
+    Digest hashedBytes = sha256.convert(passwordBytes);
+
+    // Convierte el hash a formato hexadecimal
+    String hashedPassword = hashedBytes.toString();
+
+    return hashedPassword;
+  }
+
 }
