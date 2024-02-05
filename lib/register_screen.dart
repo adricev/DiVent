@@ -1,8 +1,20 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart'; // Importa la pantalla HomeScreen
 
 class RegisterScreen extends StatelessWidget {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _invitationCodeController =
+      TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  RegisterScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,55 +36,65 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Estás muy cerca de crear tu cuenta, sólo debes rellenar los siguientes campos',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15.0,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
+                controller: _nameController,
                 decoration: _inputDecoration('Nombre'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
+                controller: _lastNameController,
                 decoration: _inputDecoration('Apellidos'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
+                controller: _emailController,
                 decoration: _inputDecoration('Correo electrónico'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
+                controller: _phoneController,
                 decoration: _inputDecoration('Teléfono'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
+                controller: _invitationCodeController,
                 decoration: _inputDecoration('Código de invitación'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
+                controller: _passwordController,
                 decoration: _inputDecoration('Contraseña'),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await _saveUser(context);
                   // Navegar a la pantalla HomeScreen cuando se presiona el botón
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF7268DD), // Color en hexadecimal
+                  backgroundColor:
+                      const Color(0xFF7268DD), // Color en hexadecimal
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 ),
-                child: Text(
+                child: const Text(
                   'Enviar solicitud',
                   style: TextStyle(
                     color: Colors.white,
@@ -80,7 +102,7 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -96,11 +118,23 @@ class RegisterScreen extends StatelessWidget {
         borderSide: BorderSide.none, // Quitar el borde visible
       ),
       filled: true,
-      fillColor: Color(0xFFD8D5FC), // Color de fondo en hexadecimal
-      contentPadding: EdgeInsets.symmetric(
+      fillColor: const Color(0xFFD8D5FC), // Color de fondo en hexadecimal
+      contentPadding: const EdgeInsets.symmetric(
         vertical: 10.0,
         horizontal: 12.0,
       ), // Ajustar el padding interior
     );
+  }
+
+  Future<void> _saveUser(BuildContext context) async {
+    final supabase = Supabase.instance.client;
+    final response = await supabase.from('users').insert([
+      {
+        'user_name': _nameController.text.toLowerCase().trim(),
+        'user_mail': _emailController.text.toLowerCase().trim(),
+        'user_pwd': _passwordController.text.trim(),
+        'user_number': _phoneController.text.trim()
+      }
+    ]);
   }
 }

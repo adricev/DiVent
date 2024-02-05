@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:table_calendar/table_calendar.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/date_symbol_data_local.dart';
 import 'list_events.dart';
 import 'new_event.dart';
