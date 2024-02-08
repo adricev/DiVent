@@ -6,13 +6,13 @@ import 'home_screen.dart'; // Importa la pantalla HomeScreen
 import 'package:crypto/crypto.dart';
 import 'dart:convert'; // Necesario para convertir el hash a String
 
-
 class RegisterScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _invitationCodeController = TextEditingController();
+  final TextEditingController _invitationCodeController =
+      TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   RegisterScreen({super.key});
@@ -159,5 +159,4 @@ class RegisterScreen extends StatelessWidget {
 
     return hashedPassword;
   }
-
 }

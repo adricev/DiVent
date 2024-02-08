@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'list_events.dart'; // Importa la clase ListEvents
-import 'home_screen.dart'; // Importa ,a clase HomeScreen
+import 'home_screen.dart'; // Importa la clase HomeScreen
 import 'profile_screen.dart'; // Importa la clase ProfileScreen
+import 'event.dart';
 
 class NewEvent extends StatefulWidget {
   @override
@@ -13,12 +14,14 @@ class _NewEventState extends State<NewEvent> {
   DateTime? selectedDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
+  String? eventNote;
+  String? eventName; // Variable para almacenar el nombre del evento
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Event'),
+        title: Text('Nuevo Evento'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -28,6 +31,12 @@ class _NewEventState extends State<NewEvent> {
             children: [
               Text('Nombre del Evento'),
               TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    eventName =
+                        value; // Actualiza el valor del nombre del evento
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: 'Nombre del Evento',
                   border: OutlineInputBorder(
@@ -39,6 +48,11 @@ class _NewEventState extends State<NewEvent> {
               SizedBox(height: 16.0),
               Text('Notas'),
               TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    eventNote = value; // Actualiza el valor de nota del evento
+                  });
+                },
                 maxLines: 2,
                 decoration: InputDecoration(
                   hintText: 'Notas del Evento',
@@ -54,7 +68,8 @@ class _NewEventState extends State<NewEvent> {
                 readOnly: true,
                 controller: TextEditingController(
                   text: selectedDate != null
-                      ? DateFormat('yyyy-MM-dd').format(selectedDate!)
+                      ? DateFormat('dd-MM-yyyy')
+                          .format(selectedDate!) //NO VA :()
                       : 'Seleccione una fecha',
                 ),
                 decoration: InputDecoration(
@@ -156,7 +171,7 @@ class _NewEventState extends State<NewEvent> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Acción para cancelar el evento
+                      Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red[200], // Fondo rojo clarito
@@ -169,7 +184,8 @@ class _NewEventState extends State<NewEvent> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Acción para crear el evento
+                      _addEvent();
+                      Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                       primary:
@@ -226,5 +242,29 @@ class _NewEventState extends State<NewEvent> {
         ),
       ),
     );
+  }
+
+  // Función para agregar un evento a la lista
+  void _addEvent() {
+    setState(() {
+      final newEvent = Event(
+        name: eventName ??
+            'Evento', // Utiliza el valor del TextFormField o 'Evento' si es nulo
+        note: eventNote ??
+            'Nota', // Utiliza el valor de la TextFormField o 'Nota' si es nula
+        date: selectedDate ?? DateTime.now(),
+        startTime: startTime ?? TimeOfDay.now(),
+        endTime: endTime ?? TimeOfDay.now(),
+      );
+
+      HomeScreen.events
+          .add(newEvent); // Agrega el nuevo evento a la lista en HomeScreen
+      // Limpia los campos de entrada
+      eventName = null;
+      eventNote = null;
+      selectedDate = null;
+      startTime = null;
+      endTime = null;
+    });
   }
 }
