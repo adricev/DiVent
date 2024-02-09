@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'login.dart'; //importa el archivo de login
 import 'register_screen.dart'; // Importa el archivo donde está definida la clase RegisterScreen
 import 'message_admin.dart'; // Importa el archivo donde está definida la clase MessageAdmin
 
@@ -78,6 +79,34 @@ class WhiteScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Navega a la pantalla LoginScreen cuando se presiona el botón
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(22),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Iniciar sesión',
+                  style: TextStyle(
+                    color: Color(0xFF7268DD), // Color morado
+                    fontSize: 20.0,
+                  ),
+                ),
               ),
             ),
           ),
