@@ -108,7 +108,7 @@ class _NewEventState extends State<NewEvent> {
                             : 'Seleccione la hora de inicio',
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Seleccione la hora de inicio',
+                        hintText: 'Hora de inicio',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.black),
@@ -139,7 +139,7 @@ class _NewEventState extends State<NewEvent> {
                             : 'Seleccione la hora de fin',
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Seleccione la hora de fin',
+                        hintText: 'Hora de fin',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.black),
@@ -203,6 +203,8 @@ class _NewEventState extends State<NewEvent> {
           ),
         ),
       ),
+
+      //NAV BAR
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
