@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<Map<String, dynamic>>>(
       future: getUserData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -19,7 +19,8 @@ class ProfileScreen extends StatelessWidget {
         } else if (snapshot.hasError) {
           return const Text('Error al cargar datos del usuario');
         } else if (snapshot.hasData) {
-          final userData = snapshot.data as Map<String, dynamic>;
+          final userData = snapshot.data!;
+          print(userData[0]);
 
           return Scaffold(
             appBar: AppBar(
@@ -41,11 +42,11 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userData['user_name'].toString(),
+                            userData[0]['user_name'].toString(),
                             style: const TextStyle(fontSize: 20),
                           ),
                           Text(
-                            userData['user_mail'].toString(),
+                            userData[0]['user_mail'].toString(),
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 10),
@@ -150,12 +151,11 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Future<Map<String, dynamic>> getUserData() async {
+  Future<List<Map<String, dynamic>>> getUserData() async {
     final supabase = Supabase.instance.client;
 
-    final response =
-        await supabase.from('users').select().eq('id_user', 1).single();
+    final response = await supabase.from('users').select().eq('id_user', 1);
     print(response);
-    return {}; // Devolver un mapa vacío si no se pueden obtener datos
+    return response; // Devolver un mapa vacío si no se pueden obtener datos
   }
 }
