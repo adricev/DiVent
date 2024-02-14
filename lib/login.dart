@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'home_screen.dart'; // Importa la pantalla HomeScreen
+import 'home_screen.dart';
 import 'package:crypto/crypto.dart';
-import 'dart:convert'; // Necesario para convertir el hash a String
+import 'dart:convert';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 200.0, // Altura de la sección superior
+            height: 200.0,
             child: Center(
               child: SvgPicture.asset(
                 'images/splashLogo1.svg',
@@ -47,11 +47,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () async {
-                      await _saveUser(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
+                      await _verifyUser(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7268DD),
@@ -95,18 +91,41 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _saveUser(BuildContext context) async {
+  Future<Map<String, dynamic>> _verifyUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
-
     String rawPassword = _passwordController.text;
     String hashedPassword = _hashPassword(rawPassword);
-
-    final response = await supabase.from('users').insert([
-      {
-        'user_mail': _emailController.text.toLowerCase().trim(),
-        'user_pwd': hashedPassword,
+    Map<String, dynamic>? userData;
+    try {
+      final response = await supabase
+          .from('users')
+          .select()
+          .eq('user_mail', _emailController.text)
+          .eq('user_pwd', hashedPassword)
+          .single();
+      print(response); // Imprimir la respuesta completa
+      final userData = response as Map<String, dynamic>;
+      if (response != null) {
+        await _saveUserData(userData);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       }
-    ]);
+    } catch (e) {
+      print(
+          'Usuario o contraseña erroneos'); //Aqui va una ventana pop con ese print
+    }
+
+    return userData ?? {};
+  }
+
+  Future<void> _saveUserData(Map<String, dynamic> userData) async {
+    // Implementa lógica para almacenar los datos del usuario en la aplicación
+    // Puedes guardar los datos en SharedPreferences, base de datos local, etc.
+    // Ejemplo: SharedPreferences para almacenar el ID del usuario
+    // final prefs = await SharedPreferences.getInstance();
+    // prefs.setInt('user_id', userData['id']);
   }
 
   String _hashPassword(String password) {
