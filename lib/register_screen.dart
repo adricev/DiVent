@@ -81,11 +81,6 @@ class RegisterScreen extends StatelessWidget {
                 onPressed: () async {
                   await _saveUser(context);
                   // Navegar a la pantalla HomeScreen cuando se presiona el botón
-                  // ignore: use_build_context_synchronously
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
@@ -128,35 +123,53 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _saveUser(BuildContext context) async {
+  Future<Map<String, dynamic>> _saveUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
-
+    Map<String, dynamic>? userData;
     // Obtén la contraseña del controlador
     String rawPassword = _passwordController.text;
-
     // Aplica el hash a la contraseña
     String hashedPassword = _hashPassword(rawPassword);
+    try {
+      final inviteCode = await supabase
+          .from('invites')
+          .select()
+          .eq('invite_code', _invitationCodeController.text.trim())
+          .eq('invite_mail', _emailController.text.toLowerCase().trim())
+          .single();
 
-    final response = await supabase.from('users').insert([
-      {
-        'user_name': _nameController.text.toLowerCase().trim(),
-        'user_mail': _emailController.text.toLowerCase().trim(),
-        'user_pwd': hashedPassword,
-        'user_number': _phoneController.text.trim()
+      print(inviteCode);
+
+      if (inviteCode != false) {
+        final response = await supabase.from('users').insert([
+          {
+            'user_name': _nameController.text.toLowerCase().trim(),
+            'user_mail': _emailController.text.toLowerCase().trim(),
+            'user_pwd': hashedPassword,
+            'user_number': _phoneController.text.trim(),
+            'invite_id': inviteCode["id_invite"]
+          }
+        ]);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       }
-    ]);
+    } catch (e) {
+      print('Error al procesar la invitación: $e');
+    }
+
+    return userData ?? {};
   }
 
   String _hashPassword(String password) {
     // Convierte la contraseña en bytes
     List<int> passwordBytes = utf8.encode(password);
-
     // Aplica el hash SHA-256
     Digest hashedBytes = sha256.convert(passwordBytes);
-
     // Convierte el hash a formato hexadecimal
     String hashedPassword = hashedBytes.toString();
-
     return hashedPassword;
   }
 }
