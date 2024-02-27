@@ -1,7 +1,10 @@
 import 'dart:developer';
-import 'package:divent/home_screen.dart';
-import 'package:divent/terms_cons_screen.dart';
+import 'package:divent/functions/shared_preferences_helper.dart';
+import 'package:divent/screens/home_screen.dart';
+import 'package:divent/screens/splash_screen.dart';
+import 'package:divent/screens/terms_cons_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'list_events.dart';
 import 'new_event.dart';
@@ -102,6 +105,26 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await PreferencesHelper.removeUser();
+                      await PreferencesHelper.saveBool('isLoggedIn', false);
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      print(prefs.getString("UserData"));
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SplashScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Cerrar Sesión'),
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors
+                          .black, // Cambia este color según tus preferencias
+                    ),
+                  )
                 ],
               ),
             ),

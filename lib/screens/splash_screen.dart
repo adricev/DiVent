@@ -1,3 +1,5 @@
+import 'package:divent/functions/shared_preferences_helper.dart';
+import 'package:divent/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'login.dart'; //importa el archivo de login
@@ -20,11 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simula una carga de la aplicación durante 3 segundos
-    Future.delayed(Duration(seconds: 3), () {
-      // Navegar a la pantalla blanca después de 3 segundos
+    Future.delayed(Duration(seconds: 2), () async {
+      // Verifica si el usuario ha iniciado sesión
+      final isLoggedIn = await PreferencesHelper.getBool('isLoggedIn');
+
+      // Navega a la pantalla adecuada
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => WhiteScreen()),
+        isLoggedIn == true
+            ? MaterialPageRoute(builder: (context) => HomeScreen())
+            : MaterialPageRoute(builder: (context) => WhiteScreen()),
       );
     });
   }

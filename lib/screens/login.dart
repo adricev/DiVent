@@ -1,9 +1,12 @@
+import 'package:divent/functions/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart'; // Importa shared_preferences
+import 'package:divent/functions/shared_preferences_helper.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -106,7 +109,13 @@ class LoginScreen extends StatelessWidget {
       print(response); // Imprimir la respuesta completa
       final userData = response as Map<String, dynamic>;
       if (response != null) {
-        await _saveUserData(userData);
+        // Guardar los datos del usuario en SharedPreferences
+        ObjUser userObj = ObjUser(
+            email: _emailController.text.toLowerCase().trim(),
+            pwd: hashedPassword);
+        await PreferencesHelper.saveUser(userObj, "UserData");
+        await PreferencesHelper.saveBool('isLoggedIn', true);
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -114,24 +123,17 @@ class LoginScreen extends StatelessWidget {
       }
     } catch (e) {
       print(
-          'Usuario o contraseña erroneos'); //Aqui va una ventana pop con ese print
+          'Usuario o contraseña erroneos'); // Aquí va una ventana pop con ese print
     }
 
     return userData ?? {};
-  }
-
-  Future<void> _saveUserData(Map<String, dynamic> userData) async {
-    // Implementa lógica para almacenar los datos del usuario en la aplicación
-    // Puedes guardar los datos en SharedPreferences, base de datos local, etc.
-    // Ejemplo: SharedPreferences para almacenar el ID del usuario
-    // final prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('user_id', userData['id']);
   }
 
   String _hashPassword(String password) {
     List<int> passwordBytes = utf8.encode(password);
     Digest hashedBytes = sha256.convert(passwordBytes);
     String hashedPassword = hashedBytes.toString();
+    print(hashedPassword);
     return hashedPassword;
   }
 }

@@ -1,6 +1,9 @@
 //import 'dart:ffi';
+import 'package:divent/functions/shared_preferences_helper.dart';
+import 'package:divent/functions/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart'; // Importa la pantalla HomeScreen
 import 'package:crypto/crypto.dart';
@@ -126,10 +129,12 @@ class RegisterScreen extends StatelessWidget {
   Future<Map<String, dynamic>> _saveUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
     Map<String, dynamic>? userData;
+
     // Obtén la contraseña del controlador
     String rawPassword = _passwordController.text;
     // Aplica el hash a la contraseña
     String hashedPassword = _hashPassword(rawPassword);
+
     try {
       final inviteCode = await supabase
           .from('invites')
@@ -141,6 +146,7 @@ class RegisterScreen extends StatelessWidget {
       print(inviteCode);
 
       if (inviteCode != false) {
+        // ignore: unused_local_variable
         final response = await supabase.from('users').insert([
           {
             'user_name': _nameController.text.toLowerCase().trim(),
@@ -151,6 +157,17 @@ class RegisterScreen extends StatelessWidget {
           }
         ]);
 
+        ObjUser userObj = ObjUser(
+            email: _emailController.text.toLowerCase().trim(),
+            pwd: hashedPassword);
+
+        await PreferencesHelper.saveUser(userObj, "UserData");
+        await PreferencesHelper.saveBool('isLoggedIn', true);
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        print(prefs.getString("UserData"));
+
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
