@@ -24,15 +24,24 @@ class _SplashScreenState extends State<SplashScreen> {
     // Simula una carga de la aplicación durante 3 segundos
     Future.delayed(Duration(seconds: 2), () async {
       // Verifica si el usuario ha iniciado sesión
-      final isLoggedIn = await PreferencesHelper.getBool('isLoggedIn');
 
+      final getUser = await PreferencesHelper.getUser();
+      print("Existe usuario Splash Screen");
+      print(getUser?.email);
+      print(getUser?.pwd);
+
+      if (getUser?.email == null || getUser?.pwd == null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WhiteScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
       // Navega a la pantalla adecuada
-      Navigator.pushReplacement(
-        context,
-        isLoggedIn == true
-            ? MaterialPageRoute(builder: (context) => HomeScreen())
-            : MaterialPageRoute(builder: (context) => WhiteScreen()),
-      );
     });
   }
 

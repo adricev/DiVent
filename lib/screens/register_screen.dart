@@ -1,9 +1,7 @@
-//import 'dart:ffi';
 import 'package:divent/functions/shared_preferences_helper.dart';
 import 'package:divent/functions/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart'; // Importa la pantalla HomeScreen
 import 'package:crypto/crypto.dart';
@@ -143,9 +141,13 @@ class RegisterScreen extends StatelessWidget {
           .eq('invite_mail', _emailController.text.toLowerCase().trim())
           .single();
 
-      print(inviteCode);
+      final compairEmail = await supabase
+          .from('users')
+          .select()
+          .eq('user_mail', _emailController.text.toLowerCase().trim());
+      //print(compairEmail);
 
-      if (inviteCode != false) {
+      if (inviteCode != false && compairEmail.isEmpty) {
         // ignore: unused_local_variable
         final response = await supabase.from('users').insert([
           {
@@ -153,7 +155,9 @@ class RegisterScreen extends StatelessWidget {
             'user_mail': _emailController.text.toLowerCase().trim(),
             'user_pwd': hashedPassword,
             'user_number': _phoneController.text.trim(),
-            'invite_id': inviteCode["id_invite"]
+            'invite_id': inviteCode["id_invite"],
+            'user_pic':
+                'https://secxumjiywgzbfdwafsc.supabase.co/storage/v1/object/public/profilePic/default.png'
           }
         ]);
 
@@ -161,17 +165,13 @@ class RegisterScreen extends StatelessWidget {
             email: _emailController.text.toLowerCase().trim(),
             pwd: hashedPassword);
 
-        await PreferencesHelper.saveUser(userObj, "UserData");
-        await PreferencesHelper.saveBool('isLoggedIn', true);
-
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        print(prefs.getString("UserData"));
-
-        // ignore: use_build_context_synchronously
+        await PreferencesHelper.saveUser(userObj, "userData");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
+      } else {
+        print('Email Existente');
       }
     } catch (e) {
       print('Error al procesar la invitación: $e');

@@ -1,13 +1,12 @@
-import 'dart:developer';
 import 'package:divent/functions/shared_preferences_helper.dart';
+import 'package:divent/screens/edit_profile.dart';
 import 'package:divent/screens/home_screen.dart';
+import 'package:divent/screens/invite_code_screen.dart';
 import 'package:divent/screens/splash_screen.dart';
 import 'package:divent/screens/terms_cons_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'list_events.dart';
-import 'edit_profile.dart';
 import 'new_event.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -24,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
           return const Text('Error al cargar datos del usuario');
         } else if (snapshot.hasData) {
           final userData = snapshot.data!;
-          print(userData[0]);
+          final pic_string = userData[0]['user_pic'].toString();
 
           return Scaffold(
             appBar: AppBar(
@@ -37,29 +36,30 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage('images/splashLogo.png'),
+                        backgroundImage: NetworkImage(pic_string),
                       ),
                       const SizedBox(width: 20),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userData[0]['user_name'].toString(),
-                            style: const TextStyle(fontSize: 20),
+                            capitalize(userData[0]['user_name'].toString()),
+                            style: const TextStyle(fontSize: 25),
                           ),
                           Text(
                             userData[0]['user_mail'].toString(),
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 18),
                           ),
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
+                              // Navegar a la pantalla de edición del perfil
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => EditProfile()),
+                                    builder: (context) => const EditProfile()),
                               );
                             },
                             child: const Text('Editar'),
@@ -92,6 +92,18 @@ class ProfileScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  if (userData[0]['user_privilege'].toString() == 'SuAdmin')
+                    ListTile(
+                      title: const Text('Generar Código de Invitación'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InviteCodeScreen()),
+                        );
+                      },
+                    ),
+
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -126,10 +138,6 @@ class ProfileScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           await PreferencesHelper.removeUser();
-                          await PreferencesHelper.saveBool('isLoggedIn', false);
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          print(prefs.getString("UserData"));
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -203,9 +211,18 @@ class ProfileScreen extends StatelessWidget {
 
   Future<List<Map<String, dynamic>>> getUserData() async {
     final supabase = Supabase.instance.client;
-
-    final response = await supabase.from('users').select().eq('id_user', 1);
-    print(response);
+    final setUser = await PreferencesHelper.getUser();
+    final response = await supabase
+        .from('users')
+        .select()
+        .eq('user_mail', /*'atik@divent.com'*/ setUser?.email as Object);
     return response; // Devolver un mapa vacío si no se pueden obtener datos
+  }
+
+  String capitalize(String input) {
+    if (input.isEmpty) {
+      return input;
+    }
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

@@ -5,7 +5,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart'; // Importa shared_preferences
 import 'package:divent/functions/shared_preferences_helper.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -103,18 +102,25 @@ class LoginScreen extends StatelessWidget {
       final response = await supabase
           .from('users')
           .select()
-          .eq('user_mail', _emailController.text)
+          .eq('user_mail', _emailController.text.toLowerCase().trim())
           .eq('user_pwd', hashedPassword)
           .single();
-      print(response); // Imprimir la respuesta completa
+      //print(response); // Imprimir la respuesta completa
+      // ignore: unnecessary_cast, unused_local_variable
       final userData = response as Map<String, dynamic>;
+      // ignore: unnecessary_null_comparison
       if (response != null) {
         // Guardar los datos del usuario en SharedPreferences
         ObjUser userObj = ObjUser(
             email: _emailController.text.toLowerCase().trim(),
             pwd: hashedPassword);
-        await PreferencesHelper.saveUser(userObj, "UserData");
-        await PreferencesHelper.saveBool('isLoggedIn', true);
+        await PreferencesHelper.saveUser(userObj, "userData");
+
+        //Mirar con fionn
+        print("SINTAXIS login");
+        final qqq = await PreferencesHelper.getUser();
+        print(qqq?.email);
+        print("POST PRINT");
 
         Navigator.push(
           context,
@@ -133,7 +139,7 @@ class LoginScreen extends StatelessWidget {
     List<int> passwordBytes = utf8.encode(password);
     Digest hashedBytes = sha256.convert(passwordBytes);
     String hashedPassword = hashedBytes.toString();
-    print(hashedPassword);
+    //print(hashedPassword);
     return hashedPassword;
   }
 }
