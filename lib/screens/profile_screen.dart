@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'list_events.dart';
+import 'edit_profile.dart';
 import 'new_event.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,11 @@ class ProfileScreen extends StatelessWidget {
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
-                              // Navegar a la pantalla de edición del perfil
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProfile()),
+                              );
                             },
                             child: const Text('Editar'),
                           ),
@@ -105,26 +110,48 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await PreferencesHelper.removeUser();
-                      await PreferencesHelper.saveBool('isLoggedIn', false);
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      print(prefs.getString("UserData"));
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                  const Spacer(), // Añadimos un espacio flexible para centrar el botón en la parte inferior
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 8), // Ajustar el padding horizontal
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 255, 220,
+                            220), // Color de fondo un poco más oscuro
+                        borderRadius: BorderRadius.circular(
+                            40), // Ajustar el radio de borde para que se adapte al texto
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await PreferencesHelper.removeUser();
+                          await PreferencesHelper.saveBool('isLoggedIn', false);
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          print(prefs.getString("UserData"));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SplashScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(
+                            color: Colors.red, // Color de texto rojo
+                            fontSize: 18,
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text('Cerrar Sesión'),
-                    style: ElevatedButton.styleFrom(
-                      onPrimary: Colors
-                          .black, // Cambia este color según tus preferencias
+                        style: ElevatedButton.styleFrom(
+                          primary:
+                              Colors.transparent, // Color de fondo transparente
+                          elevation: 0, // Sin sombra
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
