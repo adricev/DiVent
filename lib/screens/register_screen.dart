@@ -54,8 +54,27 @@ class RegisterScreen extends StatelessWidget {
                 decoration: _inputDecoration('Nombre'),
               ),
               const SizedBox(height: 10),
-              // Campos de texto para ingresar datos del usuario
-              // Similar para Apellidos, Correo electrónico, Teléfono, Código de invitación y Contraseña
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _emailController,
+                decoration: _inputDecoration('Correo electrónico'),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _phoneController,
+                decoration: _inputDecoration('Teléfono'),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _invitationCodeController,
+                decoration: _inputDecoration('Código de invitación'),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _passwordController,
+                decoration: _inputDecoration('Contraseña'),
+              ),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
                   await _saveUser(
