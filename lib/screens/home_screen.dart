@@ -207,11 +207,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
                 Text(
-                  'Hora de inicio: ${event.startTime}', // Hora de inicio del evento
+                  'Hora de inicio: ${event.startTime.format(context)}', // Hora de inicio del evento
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
                 Text(
-                  'Hora de fin: ${event.endTime}', // Hora de fin del evento
+                  'Hora de fin: ${event.endTime.format(context)}', // Hora de fin del evento
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
               ],
