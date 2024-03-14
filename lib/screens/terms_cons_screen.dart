@@ -19,15 +19,32 @@ class TermsAndConditionsScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit dui id eleifend ultricies. Ut egestas nisi eu ligula eleifend, sit amet fermentum dui vestibulum. Nulla facilisi. Maecenas id arcu in ex rutrum semper a et enim. Phasellus euismod eget lacus vel auctor. Aliquam dapibus ligula nec risus blandit, quis pharetra nulla venenatis. Vivamus sit amet nisi et enim tincidunt sollicitudin. Phasellus et lorem a mauris luctus vehicula. Integer pharetra metus sit amet felis feugiat, nec bibendum nulla bibendum. Nam nec fringilla mauris.',
+                '¡Bienvenido a nuestra aplicación! Antes de comenzar a utilizarla, por favor, tómate un momento para revisar estos términos y condiciones.',
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
               Text(
-                'Suspendisse rhoncus leo nisi, quis sodales lectus placerat quis. Morbi viverra turpis id magna congue aliquam. Suspendisse potenti. Integer non libero at ante porttitor fringilla. Aenean porttitor tortor in quam efficitur, non ullamcorper arcu scelerisque. In semper pharetra justo, sed facilisis risus elementum vitae. Proin condimentum malesuada elit, eu aliquet felis mattis eget. Vestibulum rutrum risus eu dui tempor, et placerat est sollicitudin. Vivamus volutpat velit eros, id volutpat neque hendrerit a. Morbi porttitor risus vel felis pellentesque, non elementum ex hendrerit.',
+                'Al utilizar nuestra aplicación, aceptas los siguientes términos y condiciones:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '1. Responsabilidad del usuario: Eres responsable de cualquier acción que realices en nuestra aplicación y del contenido que publiques.',
                 style: TextStyle(fontSize: 16),
               ),
-              // Puedes seguir añadiendo más texto según sea necesario
+              Text(
+                '2. Privacidad: Respetamos tu privacidad y protegemos tus datos personales de acuerdo con nuestra política de privacidad.',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                '3. Uso aceptable: No uses nuestra aplicación de manera que pueda dañarla, impedir su funcionamiento normal o afectar negativamente a otros usuarios.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Estos son solo algunos de los términos y condiciones importantes. Por favor, revisa la versión completa en nuestra aplicación antes de continuar.',
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'splash_screen.dart'; // Importa el archivo donde está definida la clase SplashScreen
 
+// Pantalla para enviar un mensaje al administrador de la aplicación
 class MessageAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class MessageAdmin extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Logotipo de la aplicación
             Container(
               margin: EdgeInsets.only(
                   bottom:
@@ -22,6 +24,7 @@ class MessageAdmin extends StatelessWidget {
                 height: 80.0,
               ),
             ),
+            // Texto explicativo
             Text(
               'A continuación podrás mandarle un mensaje al administrador de la aplicación para solicitar un código y acceder a un calendario.',
               textAlign: TextAlign.center,
@@ -31,6 +34,7 @@ class MessageAdmin extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+            // Campo de texto para el asunto del mensaje
             TextFormField(
               decoration: InputDecoration(
                 labelText: 'Asunto',
@@ -47,6 +51,7 @@ class MessageAdmin extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
+            // Campo de texto para el cuerpo del mensaje
             TextFormField(
               maxLines: 7,
               decoration: InputDecoration(
@@ -64,6 +69,7 @@ class MessageAdmin extends StatelessWidget {
               ),
             ),
             SizedBox(height: 40),
+            // Botón para enviar el mensaje
             ElevatedButton(
               onPressed: () {
                 // Mostrar un diálogo emergente para confirmar el envío del mensaje

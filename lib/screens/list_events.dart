@@ -5,12 +5,12 @@ class ListEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Listado de Eventos'),
+        title: Text('Listado de Eventos'), // Título de la AppBar
       ),
       body: Center(
         child: Text(
-          'Aquí va el listado de eventos',
-          style: TextStyle(fontSize: 20),
+          'Aquí va el listado de eventos', // Texto en el centro del cuerpo
+          style: TextStyle(fontSize: 20), // Estilo del texto
         ),
       ),
     );

@@ -3,8 +3,9 @@ import 'package:intl/intl.dart';
 import 'list_events.dart'; // Importa la clase ListEvents
 import 'home_screen.dart'; // Importa la clase HomeScreen
 import 'profile_screen.dart'; // Importa la clase ProfileScreen
-import 'event.dart';
+import 'event.dart'; // Importa la clase Event
 
+// Widget StatefulWidget para agregar un nuevo evento
 class NewEvent extends StatefulWidget {
   @override
   _NewEventState createState() => _NewEventState();
@@ -68,8 +69,8 @@ class _NewEventState extends State<NewEvent> {
                 readOnly: true,
                 controller: TextEditingController(
                   text: selectedDate != null
-                      ? DateFormat('dd-MM-yyyy')
-                          .format(selectedDate!) //NO VA :()
+                      ? DateFormat('dd-MM-yyyy').format(
+                          selectedDate!) // Formatea la fecha seleccionada
                       : 'Seleccione una fecha',
                 ),
                 decoration: InputDecoration(
@@ -104,7 +105,8 @@ class _NewEventState extends State<NewEvent> {
                       readOnly: true,
                       controller: TextEditingController(
                         text: startTime != null
-                            ? startTime!.format(context)
+                            ? startTime!
+                                .format(context) // Formatea la hora de inicio
                             : 'Seleccione la hora de inicio',
                       ),
                       decoration: InputDecoration(
@@ -135,7 +137,8 @@ class _NewEventState extends State<NewEvent> {
                       readOnly: true,
                       controller: TextEditingController(
                         text: endTime != null
-                            ? endTime!.format(context)
+                            ? endTime!
+                                .format(context) // Formatea la hora de fin
                             : 'Seleccione la hora de fin',
                       ),
                       decoration: InputDecoration(
@@ -204,7 +207,7 @@ class _NewEventState extends State<NewEvent> {
         ),
       ),
 
-      //NAV BAR
+      // Barra de navegación inferior
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -253,14 +256,15 @@ class _NewEventState extends State<NewEvent> {
         name: eventName ??
             'Evento', // Utiliza el valor del TextFormField o 'Evento' si es nulo
         note: eventNote ??
-            'Nota', // Utiliza el valor de la TextFormField o 'Nota' si es nula
+            'Nota', // Utiliza el valor del TextFormField o 'Nota' si es nulo
         date: selectedDate ?? DateTime.now(),
         startTime: startTime ?? TimeOfDay.now(),
         endTime: endTime ?? TimeOfDay.now(),
       );
 
-      HomeScreen.events
-          .add(newEvent); // Agrega el nuevo evento a la lista en HomeScreen
+      // Agrega el nuevo evento a la lista en HomeScreen
+      HomeScreen.events.add(newEvent);
+
       // Limpia los campos de entrada
       eventName = null;
       eventNote = null;

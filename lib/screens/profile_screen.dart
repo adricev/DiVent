@@ -1,39 +1,42 @@
-import 'package:divent/functions/shared_preferences_helper.dart';
-import 'package:divent/screens/edit_profile.dart';
 import 'package:divent/screens/home_screen.dart';
-import 'package:divent/screens/invite_code_screen.dart';
-import 'package:divent/screens/splash_screen.dart';
-import 'package:divent/screens/terms_cons_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'list_events.dart';
 import 'new_event.dart';
+import 'edit_profile.dart';
+import 'invite_code_screen.dart';
+import 'splash_screen.dart';
+import 'terms_cons_screen.dart';
+import 'package:divent/functions/shared_preferences_helper.dart';
 
+// Pantalla de perfil del usuario
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: getUserData(),
+      future: getUserData(), // Obtiene los datos del usuario
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtienen los datos
         } else if (snapshot.hasError) {
-          return const Text('Error al cargar datos del usuario');
+          return const Text(
+              'Error al cargar datos del usuario'); // Muestra un mensaje de error si hay un error al cargar los datos
         } else if (snapshot.hasData) {
           final userData = snapshot.data!;
           final pic_string = userData[0]['user_pic'].toString();
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Perfil'),
+              title: const Text('Perfil'), // Barra de título
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Información del usuario
                   Row(
                     children: [
                       CircleAvatar(
@@ -45,11 +48,13 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            capitalize(userData[0]['user_name'].toString()),
+                            capitalize(userData[0]['user_name']
+                                .toString()), // Nombre de usuario
                             style: const TextStyle(fontSize: 25),
                           ),
                           Text(
-                            userData[0]['user_mail'].toString(),
+                            userData[0]['user_mail']
+                                .toString(), // Correo electrónico del usuario
                             style: const TextStyle(fontSize: 18),
                           ),
                           const SizedBox(height: 10),
@@ -62,7 +67,8 @@ class ProfileScreen extends StatelessWidget {
                                     builder: (context) => const EditProfile()),
                               );
                             },
-                            child: const Text('Editar'),
+                            child: const Text(
+                                'Editar'), // Botón para editar el perfil
                           ),
                         ],
                       ),
@@ -73,10 +79,12 @@ class ProfileScreen extends StatelessWidget {
                     'Ajustes',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  // Configuraciones del usuario
                   ListTile(
                     title: const Text('Notificaciones'),
                     trailing: Switch(
-                      value: true, // Aquí deberías manejar el estado del switch
+                      value:
+                          true, // Estado de las notificaciones (debería ser dinámico)
                       onChanged: (value) {
                         // Lógica para cambiar el estado de las notificaciones
                       },
@@ -86,12 +94,13 @@ class ProfileScreen extends StatelessWidget {
                     title: const Text('Modo Oscuro'),
                     trailing: Switch(
                       value:
-                          false, // Aquí deberías manejar el estado del switch
+                          false, // Estado del modo oscuro (debería ser dinámico)
                       onChanged: (value) {
                         // Lógica para cambiar el estado del modo oscuro
                       },
                     ),
                   ),
+                  // Opción para generar código de invitación (solo para usuarios con privilegio 'SuAdmin')
                   if (userData[0]['user_privilege'].toString() == 'SuAdmin')
                     ListTile(
                       title: const Text('Generar Código de Invitación'),
@@ -103,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                     ),
-
+                  // Términos y condiciones
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -122,7 +131,8 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Spacer(), // Añadimos un espacio flexible para centrar el botón en la parte inferior
+                  const Spacer(), // Espacio flexible para centrar el botón en la parte inferior
+                  // Botón para cerrar sesión
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
@@ -137,7 +147,8 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         onPressed: () async {
-                          await PreferencesHelper.removeUser();
+                          await PreferencesHelper
+                              .removeUser(); // Eliminar datos de usuario al cerrar sesión
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -163,6 +174,7 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // Barra de navegación inferior
             bottomNavigationBar: BottomAppBar(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -203,12 +215,14 @@ class ProfileScreen extends StatelessWidget {
             ),
           );
         } else {
-          return const Text('No se pudo obtener información del usuario');
+          return const Text(
+              'No se pudo obtener información del usuario'); // Mensaje si no se pueden obtener datos del usuario
         }
       },
     );
   }
 
+  // Función para obtener los datos del usuario desde la base de datos
   Future<List<Map<String, dynamic>>> getUserData() async {
     final supabase = Supabase.instance.client;
     final setUser = await PreferencesHelper.getUser();
@@ -219,6 +233,7 @@ class ProfileScreen extends StatelessWidget {
     return response; // Devolver un mapa vacío si no se pueden obtener datos
   }
 
+  // Función para capitalizar la primera letra de una cadena
   String capitalize(String input) {
     if (input.isEmpty) {
       return input;

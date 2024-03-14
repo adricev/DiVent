@@ -1,7 +1,7 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'profile_screen.dart';
+import 'dart:io'; // Importación para manejar operaciones de archivos
+import 'package:flutter/material.dart'; // Importación de Flutter Material Design
+import 'package:image_picker/image_picker.dart'; // Importación para seleccionar imágenes
+import 'profile_screen.dart'; // Importación de la pantalla de perfil
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -11,6 +11,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  // Controladores para los campos de texto
   final TextEditingController _newNameController = TextEditingController();
   final TextEditingController _confirmNameController = TextEditingController();
   final TextEditingController _newEmailController = TextEditingController();
@@ -18,8 +19,9 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _newPhoneController = TextEditingController();
   final TextEditingController _confirmPhoneController = TextEditingController();
 
-  File? _image;
+  File? _image; // Variable para almacenar la imagen seleccionada
 
+  // Método para obtener una imagen de la galería
   Future _getImageFromGallery() async {
     final imagePicker = ImagePicker();
     final pickedImage =
@@ -27,7 +29,7 @@ class _EditProfileState extends State<EditProfile> {
 
     if (pickedImage == null) return;
     setState(() {
-      _image = File(pickedImage.path);
+      _image = File(pickedImage.path); // Almacena la imagen seleccionada
     });
   }
 
@@ -35,26 +37,28 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: const Text('Edit Profile'), // Título de la barra de aplicación
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Profile picture section (assuming you want one)
+            // Sección de imagen de perfil
             _image != null
                 ? CircleAvatar(
-                    backgroundImage: FileImage(_image!),
+                    backgroundImage:
+                        FileImage(_image!), // Muestra la imagen seleccionada
                     radius: 50.0,
                   )
                 : ElevatedButton(
                     onPressed: _getImageFromGallery,
-                    child: const Text('Choose Profile Picture'),
+                    child: const Text(
+                        'Choose Profile Picture'), // Botón para seleccionar una imagen
                   ),
             const SizedBox(height: 10),
 
-            // Text form fields
+            // Campos de texto
             TextFormField(
               controller: _newNameController,
               decoration: _inputDecoration('Nuevo Nombre'),
@@ -86,15 +90,16 @@ class _EditProfileState extends State<EditProfile> {
             ),
             const SizedBox(height: 10),
 
+            // Botón para guardar cambios
             ElevatedButton(
               onPressed: () {
-                // Navigate to profile screen when Save Changes button is pressed
+                // Navegar a la pantalla de perfil cuando se presiona el botón "Save Changes"
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ProfileScreen()),
                 );
               },
-              child: const Text('Save Changes'),
+              child: const Text('Save Changes'), // Texto del botón
             ),
           ],
         ),
@@ -102,6 +107,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  // Método para personalizar la apariencia de los campos de texto
   InputDecoration _inputDecoration(String labelText) {
     return InputDecoration(
       labelText: labelText,

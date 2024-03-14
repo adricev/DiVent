@@ -2,7 +2,7 @@ import 'package:divent/functions/shared_preferences_helper.dart';
 import 'package:divent/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'login.dart'; //importa el archivo de login
+import 'login.dart'; // Importa el archivo de login
 import 'register_screen.dart'; // Importa el archivo donde está definida la clase RegisterScreen
 import 'message_admin.dart'; // Importa el archivo donde está definida la clase MessageAdmin
 
@@ -12,6 +12,7 @@ void main() {
   ));
 }
 
+// Pantalla de bienvenida que se muestra al inicio
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -31,11 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
       print(getUser?.pwd);
 
       if (getUser?.email == null || getUser?.pwd == null) {
+        // Si el usuario no ha iniciado sesión, navega a WhiteScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => WhiteScreen()),
         );
       } else {
+        // Si el usuario ha iniciado sesión, navega a HomeScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -62,6 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
+// Pantalla que se muestra si el usuario no ha iniciado sesión
 class WhiteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

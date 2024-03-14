@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'list_events.dart';
-import 'new_event.dart';
-import 'profile_screen.dart';
-import 'event.dart';
+import 'package:flutter/material.dart'; // Importación de Flutter Material Design
+import 'package:intl/date_symbol_data_local.dart'; // Importación para inicializar el formato de fecha local
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart'; // Importación del calendario de mesa
+import 'list_events.dart'; // Importación de la lista de eventos
+import 'new_event.dart'; // Importación de la pantalla para crear un nuevo evento
+import 'profile_screen.dart'; // Importación de la pantalla de perfil
+import 'event.dart'; // Importación de la clase Event
 
 class HomeScreen extends StatefulWidget {
   static List<Event> events = []; // Lista de eventos
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting('es_ES');
+    initializeDateFormatting('es_ES'); // Inicializa el formato de fecha local
     // Llama al método para imprimir los eventos cuando se inicia la pantalla
     HomeScreen.printEventsData();
   }
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Home'), // Título de la barra de aplicación
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,12 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.all(4.0),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(8.0),
+                        color: Color.fromARGB(255, 122, 48, 172),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                       child: Text(
                         '${date.day}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                     );
                   },
@@ -102,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 20),
-            _buildEventBoxes(),
+            _buildEventBoxes(), // Widget para mostrar los eventos
             SizedBox(height: 20),
           ],
         ),
@@ -112,11 +114,13 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: Image.asset('images/B Calendar.png', width: 35),
+              icon: Image.asset('images/B Calendar.png',
+                  width: 35), // Icono para la vista de calendario
               onPressed: () {},
             ),
             IconButton(
-              icon: Image.asset('images/Menu.png', width: 35),
+              icon: Image.asset('images/Menu.png',
+                  width: 35), // Icono para mostrar la lista de eventos
               onPressed: () {
                 Navigator.push(
                   context,
@@ -125,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             IconButton(
-              icon: Image.asset('images/Nuevo.png', width: 30),
+              icon: Image.asset('images/Nuevo.png',
+                  width: 30), // Icono para agregar un nuevo evento
               onPressed: () {
                 Navigator.push(
                   context,
@@ -134,7 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             IconButton(
-              icon: Image.asset('images/Perfil.png', width: 30),
+              icon: Image.asset('images/Perfil.png',
+                  width: 30), // Icono para ir a la pantalla de perfil
               onPressed: () {
                 Navigator.push(
                   context,
@@ -148,20 +154,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Función para obtener los eventos para un día específico
-  List<String> _getEventsForDay(DateTime day) {
-    List<String> eventsForDay = [];
-    for (String event in events) {
-      // Asumiendo que los eventos son solo strings
-      // Aquí puedes implementar la lógica para comparar fechas y obtener los eventos para el día especificado
-      eventsForDay.add(event);
+// Función para obtener los eventos para un día específico
+  List<Event> _getEventsForDay(DateTime day) {
+    List<Event> eventsForDay = [];
+    for (Event event in HomeScreen.events) {
+      // Aquí comparamos la fecha del evento con la fecha especificada
+      if (event.date.year == day.year &&
+          event.date.month == day.month &&
+          event.date.day == day.day) {
+        eventsForDay.add(event);
+      }
     }
     return eventsForDay;
   }
 
+// Función para formatear números a dos dígitos con ceros a la izquierda si es necesario
+  String _formatNumber(int number) {
+    return number.toString().padLeft(2, '0');
+  }
+
+  // Widget para mostrar los eventos en forma de cajas
   Widget _buildEventBoxes() {
     return Container(
-      color: Colors.grey[200],
+      color: const Color.fromARGB(255, 255, 255, 255),
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: ListView.builder(
         shrinkWrap: true,
@@ -181,20 +196,23 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Nombre: ${event.name}',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  'Nombre: ${event.name}', // Nombre del evento
+                  style: TextStyle(
+                      fontSize: 19.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Fecha: ${event.date}',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  'Fecha: ${DateFormat('dd-MM-yyyy').format(event.date)}', // Fecha del evento
+                  style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
                 Text(
-                  'Hora de inicio: ${event.startTime}',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  'Hora de inicio: ${event.startTime}', // Hora de inicio del evento
+                  style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
                 Text(
-                  'Hora de fin: ${event.endTime}',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  'Hora de fin: ${event.endTime}', // Hora de fin del evento
+                  style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
               ],
             ),

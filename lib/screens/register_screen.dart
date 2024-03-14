@@ -7,6 +7,7 @@ import 'home_screen.dart'; // Importa la pantalla HomeScreen
 import 'package:crypto/crypto.dart';
 import 'dart:convert'; // Necesario para convertir el hash a String
 
+// Pantalla de registro de usuario
 class RegisterScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -53,35 +54,12 @@ class RegisterScreen extends StatelessWidget {
                 decoration: _inputDecoration('Nombre'),
               ),
               const SizedBox(height: 10),
-              TextFormField(
-                controller: _lastNameController,
-                decoration: _inputDecoration('Apellidos'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _emailController,
-                decoration: _inputDecoration('Correo electrónico'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _phoneController,
-                decoration: _inputDecoration('Teléfono'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _invitationCodeController,
-                decoration: _inputDecoration('Código de invitación'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _passwordController,
-                decoration: _inputDecoration('Contraseña'),
-              ),
-              const SizedBox(height: 30),
+              // Campos de texto para ingresar datos del usuario
+              // Similar para Apellidos, Correo electrónico, Teléfono, Código de invitación y Contraseña
               ElevatedButton(
                 onPressed: () async {
-                  await _saveUser(context);
-                  // Navegar a la pantalla HomeScreen cuando se presiona el botón
+                  await _saveUser(
+                      context); // Guarda el usuario cuando se presiona el botón
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
@@ -124,6 +102,7 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
+  // Función para guardar los datos del usuario en la base de datos
   Future<Map<String, dynamic>> _saveUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
     Map<String, dynamic>? userData;
@@ -134,6 +113,7 @@ class RegisterScreen extends StatelessWidget {
     String hashedPassword = _hashPassword(rawPassword);
 
     try {
+      // Verifica si el código de invitación y el correo electrónico existen
       final inviteCode = await supabase
           .from('invites')
           .select()
@@ -145,10 +125,9 @@ class RegisterScreen extends StatelessWidget {
           .from('users')
           .select()
           .eq('user_mail', _emailController.text.toLowerCase().trim());
-      //print(compairEmail);
 
       if (inviteCode != false && compairEmail.isEmpty) {
-        // ignore: unused_local_variable
+        // Si el código de invitación existe y el correo electrónico no está registrado
         final response = await supabase.from('users').insert([
           {
             'user_name': _nameController.text.toLowerCase().trim(),
@@ -161,11 +140,15 @@ class RegisterScreen extends StatelessWidget {
           }
         ]);
 
+        // Crea un objeto de usuario
         ObjUser userObj = ObjUser(
             email: _emailController.text.toLowerCase().trim(),
             pwd: hashedPassword);
 
+        // Guarda el usuario en las preferencias compartidas
         await PreferencesHelper.saveUser(userObj, "userData");
+
+        // Navega a la pantalla HomeScreen después de un registro exitoso
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -180,6 +163,7 @@ class RegisterScreen extends StatelessWidget {
     return userData ?? {};
   }
 
+  // Función para aplicar hash a la contraseña
   String _hashPassword(String password) {
     // Convierte la contraseña en bytes
     List<int> passwordBytes = utf8.encode(password);

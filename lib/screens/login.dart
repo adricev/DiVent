@@ -7,10 +7,13 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:divent/functions/shared_preferences_helper.dart';
 
+// Pantalla de inicio de sesión
 class LoginScreen extends StatelessWidget {
+  // Controladores de texto para los campos de correo electrónico y contraseña
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Constructor
   LoginScreen({Key? key});
 
   @override
@@ -20,6 +23,7 @@ class LoginScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Logotipo de la aplicación
           SizedBox(
             height: 200.0,
             child: Center(
@@ -37,18 +41,22 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Campo de texto para el correo electrónico
                   TextFormField(
                     controller: _emailController,
                     decoration: _inputDecoration('Correo electrónico'),
                   ),
                   const SizedBox(height: 10),
+                  // Campo de texto para la contraseña
                   TextFormField(
                     controller: _passwordController,
                     decoration: _inputDecoration('Contraseña'),
                   ),
                   const SizedBox(height: 30),
+                  // Botón para enviar la solicitud de inicio de sesión
                   ElevatedButton(
                     onPressed: () async {
+                      // Verificar al usuario
                       await _verifyUser(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -77,6 +85,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  // Estilo de los campos de texto
   InputDecoration _inputDecoration(String labelText) {
     return InputDecoration(
       labelText: labelText,
@@ -93,53 +102,42 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<Map<String, dynamic>> _verifyUser(BuildContext context) async {
+  // Verificar las credenciales del usuario
+  Future<void> _verifyUser(BuildContext context) async {
     final supabase = Supabase.instance.client;
     String rawPassword = _passwordController.text;
     String hashedPassword = _hashPassword(rawPassword);
+    String emailController = _emailController.text.toLowerCase().trim();
     Map<String, dynamic>? userData;
     try {
+      // Realizar una consulta a la base de datos para verificar las credenciales del usuario
       final response = await supabase
           .from('users')
           .select()
-          .eq('user_mail', _emailController.text.toLowerCase().trim())
+          .eq('user_mail', emailController)
           .eq('user_pwd', hashedPassword)
           .single();
-      //print(response); // Imprimir la respuesta completa
-      // ignore: unnecessary_cast, unused_local_variable
-      final userData = response as Map<String, dynamic>;
-      // ignore: unnecessary_null_comparison
+
+      // Si las credenciales son válidas, guardar los datos del usuario y navegar a la pantalla HomeScreen
       if (response != null) {
-        // Guardar los datos del usuario en SharedPreferences
-        ObjUser userObj = ObjUser(
-            email: _emailController.text.toLowerCase().trim(),
-            pwd: hashedPassword);
+        ObjUser userObj = ObjUser(email: emailController, pwd: hashedPassword);
         await PreferencesHelper.saveUser(userObj, "userData");
-
-        //Mirar con fionn
-        print("SINTAXIS login");
-        final qqq = await PreferencesHelper.getUser();
-        print(qqq?.email);
-        print("POST PRINT");
-
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       }
     } catch (e) {
-      print(
-          'Usuario o contraseña erroneos'); // Aquí va una ventana pop con ese print
+      // Manejar errores de autenticación
+      print('Usuario o contraseña incorrectos');
     }
-
-    return userData ?? {};
   }
 
+  // Convertir la contraseña en un hash
   String _hashPassword(String password) {
     List<int> passwordBytes = utf8.encode(password);
     Digest hashedBytes = sha256.convert(passwordBytes);
     String hashedPassword = hashedBytes.toString();
-    //print(hashedPassword);
     return hashedPassword;
   }
 }

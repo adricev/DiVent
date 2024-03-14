@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Pantalla para crear códigos de invitación
 class InviteCodeScreen extends StatelessWidget {
+  // Controladores de texto para los campos de correo electrónico
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _confirmEmailController = TextEditingController();
 
+  // Constructor
   InviteCodeScreen({super.key});
 
   @override
@@ -19,11 +22,12 @@ class InviteCodeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Campo de texto para el correo electrónico
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Correo electrónico'),
               validator: (value) {
-                // Validar si el correo tiene el formato correcto
+                // Validación del formato del correo electrónico
                 if (!isValidEmail(value!)) {
                   return 'Ingresa un correo electrónico válido';
                 }
@@ -31,12 +35,13 @@ class InviteCodeScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
+            // Campo de texto para confirmar el correo electrónico
             TextFormField(
               controller: _confirmEmailController,
               decoration:
                   InputDecoration(labelText: 'Confirmar Correo electrónico'),
               validator: (value) {
-                // Validar si el correo tiene el formato correcto
+                // Validación del formato del correo electrónico
                 if (!isValidEmail(value!)) {
                   return 'Ingresa un correo electrónico válido';
                 }
@@ -44,6 +49,7 @@ class InviteCodeScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
+            // Botón para crear el código de invitación
             ElevatedButton(
               onPressed: () {
                 // Validar si los correos son iguales
@@ -63,6 +69,7 @@ class InviteCodeScreen extends StatelessWidget {
                         ),
                       ),
                       actions: [
+                        // Botón para copiar el código al portapapeles
                         TextButton(
                           onPressed: () {
                             // Copiar al portapapeles
@@ -94,6 +101,7 @@ class InviteCodeScreen extends StatelessWidget {
     );
   }
 
+  // Función para generar un código de invitación aleatorio
   String _generarCodigoInvitacion() {
     // Lógica para generar código aleatorio de 4 letras en mayúscula
     // (puedes personalizar esto según tus necesidades)
@@ -105,27 +113,12 @@ class InviteCodeScreen extends StatelessWidget {
     return codigo;
   }
 
+  // Función para subir el código de invitación a la base de datos
   Future<void> _subirInvitacion(String codigo, String email) async {
     final supabase = Supabase.instance.client;
 
     try {
-      // Validar si ya existe un código con el mismo email
-      // final existeCodigo = await supabase
-      //     .from('invites')
-      //     .select()
-      //     .eq('invite_code', codigo)
-      //     .eq('invite_mail', email);
-
-      // if (existeCodigo.isNotEmpty) {
-      //   // Mostrar mensaje de error si ya existe un código con el mismo email
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text('Ya existe un código de invitación con este correo.'),
-      //     ),
-      //   );
-      //   return;
-      // }
-
+      // Subir el código de invitación a la tabla invites
       final response = await supabase.from('invites').insert([
         {
           'invite_code': codigo,
@@ -146,6 +139,7 @@ class InviteCodeScreen extends StatelessWidget {
     }
   }
 
+  // Función para validar el formato de correo electrónico
   bool isValidEmail(String email) {
     // Validar el formato de correo electrónico
     RegExp emailRegex =
