@@ -145,13 +145,13 @@ class WhiteScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF7268DD), // Color en hexadecimal
+                    backgroundColor: Color(0xFF7268DD), // Color en hexadecimal
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(22),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Tengo un código',
                       style: TextStyle(

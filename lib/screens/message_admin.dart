@@ -99,7 +99,7 @@ class MessageAdmin extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF7268DD),
+                backgroundColor: Color(0xFF7268DD),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

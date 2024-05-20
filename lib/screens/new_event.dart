@@ -177,8 +177,7 @@ class _NewEventState extends State<NewEvent> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red[200], // Fondo rojo clarito
-                      onPrimary: Colors.white, // Texto blanco
+                      foregroundColor: Colors.white, backgroundColor: Colors.red[200], // Texto blanco
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -191,9 +190,7 @@ class _NewEventState extends State<NewEvent> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:
-                          Color.fromARGB(255, 122, 115, 222), // Fondo morado
-                      onPrimary: Colors.white, // Texto blanco
+                      foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 122, 115, 222), // Texto blanco
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),

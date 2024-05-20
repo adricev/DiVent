@@ -51,6 +51,7 @@ class LoginScreen extends StatelessWidget {
                   TextFormField(
                     controller: _passwordController,
                     decoration: _inputDecoration('Contraseña'),
+                    obscureText: true,
                   ),
                   const SizedBox(height: 30),
                   // Botón para enviar la solicitud de inicio de sesión

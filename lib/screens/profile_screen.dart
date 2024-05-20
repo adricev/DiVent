@@ -164,8 +164,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary:
-                              Colors.transparent, // Color de fondo transparente
+                          backgroundColor: Colors.transparent, // Color de fondo transparente
                           elevation: 0, // Sin sombra
                         ),
                       ),
