@@ -10,7 +10,6 @@ import 'event_detail_screen.dart'; // Importa la pantalla de detalles del evento
 
 class HomeScreen extends StatefulWidget {
   static List<Event> events = [];
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 
@@ -35,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Column(

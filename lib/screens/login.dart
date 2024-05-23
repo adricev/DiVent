@@ -123,6 +123,7 @@ class LoginScreen extends StatelessWidget {
       if (response != null) {
         ObjUser userObj = ObjUser(email: emailController, pwd: hashedPassword);
         await PreferencesHelper.saveUser(userObj, "userData");
+        print(userObj);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -130,7 +131,11 @@ class LoginScreen extends StatelessWidget {
       }
     } catch (e) {
       // Manejar errores de autenticación
-      print('Usuario o contraseña incorrectos');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Usuario o contraseña incorrectos'),
+        ),
+      );
     }
   }
 

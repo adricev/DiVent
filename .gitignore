@@ -44,3 +44,4 @@ app.*.map.json
 ios/Podfile.lock
 ios/Runner.xcodeproj/project.pbxproj
 ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+pubspec.lock
