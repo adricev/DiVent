@@ -20,68 +20,76 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Logotipo de la aplicación
-          SizedBox(
-            height: 200.0,
-            child: Center(
-              child: SvgPicture.asset(
-                'images/splashLogo1.svg',
-                width: 80.0,
-                height: 80.0,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Campo de texto para el correo electrónico
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: _inputDecoration('Correo electrónico'),
-                  ),
-                  const SizedBox(height: 10),
-                  // Campo de texto para la contraseña
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: _inputDecoration('Contraseña'),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 30),
-                  // Botón para enviar la solicitud de inicio de sesión
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Verificar al usuario
-                      await _verifyUser(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF7268DD),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 15),
-                    ),
-                    child: const Text(
-                      'Enviar solicitud',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(top: 20.0, bottom: 60.0), // Margen superior e inferior
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Logotipo de la aplicación
+                SizedBox(
+                  height: 200.0,
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'images/splashLogo1.svg',
+                      width: 80.0,
+                      height: 80.0,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 100.0, left: 20.0, right: 20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Campo de texto para el correo electrónico
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: _inputDecoration('Correo electrónico'),
+                      ),
+                      const SizedBox(height: 10),
+                      // Campo de texto para la contraseña
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: _inputDecoration('Contraseña'),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 30),
+                      // Botón para enviar la solicitud de inicio de sesión
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Verificar al usuario
+                          await _verifyUser(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF7268DD),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 15),
+                        ),
+                        child: const Text(
+                          'Enviar solicitud',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

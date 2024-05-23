@@ -18,10 +18,10 @@ class EventDetailScreen extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(40.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Color.fromARGB(255, 105, 48, 133).withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: Offset(0, 3),
